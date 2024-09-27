@@ -77,8 +77,16 @@ namespace Lab_MA_01
             Switch temp = sender as Switch;
             if (!(temp is null))
             {
-                if (!activatedGyroscope) { activatedGyroscope = true; Gyroscope.Start(SensorSpeed.UI); }
-                else { activatedGyroscope = false; Gyroscope.Stop(); labelGyroscope.Text = ""; }
+                try
+                {
+                    if (!activatedGyroscope) { activatedGyroscope = true; Gyroscope.Start(SensorSpeed.UI); }
+                    else { activatedGyroscope = false; Gyroscope.Stop(); labelGyroscope.Text = ""; }
+
+                }
+                catch (Exception) { 
+                    if (activatedGyroscope) labelGyroscope.Text = "No working";
+                    else labelGyroscope.Text = "";
+                };
             }
         }
 
