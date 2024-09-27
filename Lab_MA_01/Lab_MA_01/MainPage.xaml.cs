@@ -23,14 +23,22 @@ namespace Lab_MA_01
 
         bool activatedAccelerometer = false;
         bool activatedGyroscope = false;
+
         Label labelAccelerometer = new Label();
         Label labelGyroscope = new Label();
+
         Button button = new Button();
         Switch swh = new Switch();
+        Slider speedSlider = new Slider();
+
         StackLayout stack = new StackLayout();
         RelativeLayout relative = new RelativeLayout();
+
         Color colorButton = Color.Red;
         Color colorBackground = Color.DarkCyan;
+
+        int maxSize = 200;
+        int minSize = 50;
 
         protected override void OnAppearing()
         {
@@ -40,6 +48,11 @@ namespace Lab_MA_01
 
             var width = DeviceDisplay.MainDisplayInfo.Width;
             var height = DeviceDisplay.MainDisplayInfo.Height;
+
+            speedSlider.Minimum = 0;
+            speedSlider.Maximum = 25;
+            speedSlider.WidthRequest = 150;
+            speedSlider.Rotation = -90;
 
             stack.BackgroundColor = Color.GreenYellow;
 
@@ -63,8 +76,12 @@ namespace Lab_MA_01
                 yConstraint: Constraint.RelativeToParent((parent) => 10));
 
             relative.Children.Add(labelGyroscope,
-                xConstraint: Constraint.RelativeToParent((parent) => parent.Width - 100),
+                xConstraint: Constraint.RelativeToParent((parent) => parent.Width - 140),
                 yConstraint: Constraint.RelativeToParent((parent) => 15));
+
+            relative.Children.Add(speedSlider,
+                xConstraint: Constraint.RelativeToParent((parent) => -45),
+                yConstraint: Constraint.RelativeToParent((parent) => 105));
 
             Content = stack;
         }
@@ -95,8 +112,13 @@ namespace Lab_MA_01
             var X = e.Reading.AngularVelocity.X;
             var Y = e.Reading.AngularVelocity.Y;
             var Z = e.Reading.AngularVelocity.Z;
+            int sizeChange = 5;
 
-            labelGyroscope.Text = $"{Math.Round(X, 3)} {Math.Round(Y, 3)} {Math.Round(Z, 3)}";
+            labelGyroscope.Text = $"Г: {Math.Round(X, 3)} {Math.Round(Y, 3)} {Math.Round(Z, 3)}";
+            if (X < -0.5 && button.Width > minSize) {button.WidthRequest -= sizeChange; button.HeightRequest -= sizeChange;}
+            else if (X > 0.5 && button.Width < maxSize && button.X > 0 && button.X + button.Width < relative.Width 
+                && button.Y > 0 && button.Y + button.Height < relative.Height) { button.WidthRequest += sizeChange; button.HeightRequest += sizeChange; }
+
         }
 
         private Button createButton(Color color, double width, double height)
@@ -128,9 +150,9 @@ namespace Lab_MA_01
             var X = e.Reading.Acceleration.X;
             var Y = e.Reading.Acceleration.Y;
             var Z = e.Reading.Acceleration.Z;
-            var speed = 10;
+            var speed = speedSlider.Value;
 
-            labelAccelerometer.Text = $"{Math.Round(X, 3)} {Math.Round(Y, 3)} {Math.Round(Z, 3)}";
+            labelAccelerometer.Text = $"А: {Math.Round(X, 3)} {Math.Round(Y, 3)} {Math.Round(Z, 3)}";
 
             if (X > 0.3 && button.X >= 5)
             {
