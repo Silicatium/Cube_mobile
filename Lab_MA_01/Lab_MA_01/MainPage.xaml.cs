@@ -46,9 +46,6 @@ namespace Lab_MA_01
             Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
             swh.Toggled += Swh_Toggled;
 
-            var width = DeviceDisplay.MainDisplayInfo.Width;
-            var height = DeviceDisplay.MainDisplayInfo.Height;
-
             speedSlider.Minimum = 0;
             speedSlider.Maximum = 25;
             speedSlider.WidthRequest = 150;
@@ -86,6 +83,19 @@ namespace Lab_MA_01
             Content = stack;
         }
 
+        private Button createButton(Color color, double width, double height)
+        {
+            button.BackgroundColor = color;
+            button.HeightRequest = height;
+            button.WidthRequest = width;
+            button.CornerRadius = 10;
+            button.HorizontalOptions = LayoutOptions.Center;
+            button.VerticalOptions = LayoutOptions.Center;
+            button.Clicked += Button_Clicked;
+
+            return button;
+        }
+
         private void Swh_Toggled(object sender, ToggledEventArgs e)
         {
             if (stack.BackgroundColor != Color.Gold) stack.BackgroundColor = Color.Gold;
@@ -119,20 +129,6 @@ namespace Lab_MA_01
             else if (X > 0.5 && button.Width < maxSize && button.X > 0 && button.X + button.Width < relative.Width 
                 && button.Y > 0 && button.Y + button.Height < relative.Height) { button.WidthRequest += sizeChange; button.HeightRequest += sizeChange; }
 
-        }
-
-        private Button createButton(Color color, double width, double height)
-        {
-            Button button = new Button();
-            button.BackgroundColor = color;
-            button.HeightRequest = height;
-            button.WidthRequest = width;
-            button.CornerRadius = 10;
-            button.HorizontalOptions = LayoutOptions.Center;
-            button.VerticalOptions = LayoutOptions.Center;
-            button.Clicked += Button_Clicked;
-
-            return button;
         }
 
         private void Button_Clicked(object sender, EventArgs e)
